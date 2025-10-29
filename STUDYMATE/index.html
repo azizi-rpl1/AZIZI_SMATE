@@ -1,0 +1,226 @@
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudyMate - Aplikasi Manajemen Tugas Siswa</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="style.css">
+<style>
+
+</style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+<!-- Header -->
+<header class="gradient-bg text-white p-6 shadow-lg">
+<div class="max-w-6xl mx-auto flex items-center space-x-4">
+<img src="studymate.png" alt="Logo Study Mate" class="w-12 h-12 rounded-lg object-cover">
+    <h1> STUDYMATE </h1>
+    <nav>
+      <a href="index.html">CATATAN PINTAR</a>
+      <a href="sec.html">KALENDER</a>
+      <a href="third.html">TIMER</a>
+      <a href="fourth.html">TASK PROGRESS</a>
+    </nav>
+  </header>
+
+
+
+<!-- ... konten lainnya tetap sama ... -->
+
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto p-6">
+
+          <!-- Modal for Reading Notes -->
+    <div id="note-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-8 max-w-2xl mx-4 max-h-96 overflow-y-auto">
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h2 id="note-modal-title" class="text-2xl font-bold text-gray-800 mb-2">Judul Catatan</h2>
+                    <span id="note-modal-subject" class="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full">Mata Pelajaran</span>
+                </div>
+                <button onclick="closeNoteModal()" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            </div>
+            <div id="note-modal-content" class="text-gray-700 leading-relaxed mb-6">
+                Isi catatan akan ditampilkan di sini...
+            </div>
+            <div class="flex justify-between items-center">
+                <span id="note-modal-status" class="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full">Status</span>
+                <div class="space-x-3">
+                    <button onclick="markAsReview()" class="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition-colors">
+                        🔄 Perlu Review
+                    </button>
+                    <button onclick="markAsUnderstood()" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors">
+                        ✅ Sudah Paham
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!-- Catatan Pintar Tab -->
+        <div id="notes-tab" class="tab-content">
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Add Note Form -->
+                <div id="add-note" class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-800">✍️ Tambah Catatan Baru</h2>
+                    <form onsubmit="addNote(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Mata Pelajaran</label>
+                            <select id="subject" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option>Matematika</option>
+                                <option>Bahasa Indonesia</option>
+                                <option>Bahasa Inggris</option>
+                                <option>IPA</option>
+                                <option>IPS</option>
+                                <option>Seni Budaya</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Judul Materi</label>
+                            <input type="text" id="noteTitle" placeholder="Contoh: Teorema Pythagoras" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Catatan</label>
+                            <textarea id="noteContent" rows="4" placeholder="Tulis catatan materi di sini..." class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required></textarea>
+                        </div>
+                        <div>
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" id="needReview" class="rounded text-blue-600">
+                                <span class="text-sm text-gray-700">Perlu dipelajari ulang</span>
+                            </label>
+                        </div>
+                        <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                            💾 Simpan Catatan
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Notes List -->
+                <div id="notes-list" class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-800">📋 Daftar Catatan</h2>
+                    <div id="notesList" class="space-y-3">
+                        <!-- Sample notes -->
+                        <div class="p-3 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                            <div class="flex justify-between items-start">
+                                <div class="flex-1">
+                                    <h3 class="font-medium text-gray-800 text-sm">Matematika - Aljabar</h3>
+                                    <p class="text-xs text-gray-500 mt-1">Rumus kuadrat: ax² + bx + c = 0</p>
+                                    <span class="inline-block mt-2 px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded">Perlu Review</span>
+                                </div>
+                                <div class="flex items-center space-x-2 ml-3">
+                                    <button onclick="readNote(this)" class="text-gray-400 hover:text-blue-600 transition-colors p-1" title="Baca catatan">
+                                        👁️
+                                    </button>
+                                    <button onclick="reviewNote(this)" class="text-blue-600 hover:text-blue-800 text-xs px-2 py-1 rounded hover:bg-blue-50 transition-colors">
+                                        Review
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-white border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+                            <div class="flex justify-between items-start">
+                                <div class="flex-1">
+                                    <h3 class="font-medium text-gray-800 text-sm">IPA - Fotosintesis</h3>
+                                    <p class="text-xs text-gray-500 mt-1">Proses tumbuhan membuat makanan dengan bantuan sinar matahari</p>
+                                    <span class="inline-block mt-2 px-2 py-1 bg-green-100 text-green-700 text-xs rounded">Sudah Dipahami</span>
+                                </div>
+                                <div class="flex items-center space-x-2 ml-3">
+                                    <button onclick="readNote(this)" class="text-gray-400 hover:text-blue-600 transition-colors p-1" title="Baca catatan">
+                                        👁️
+                                    </button>
+                                    <button onclick="reviewNote(this)" class="text-blue-600 hover:text-blue-800 text-xs px-2 py-1 rounded hover:bg-blue-50 transition-colors">
+                                        Review
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+      
+
+        <!-- Mode Fokus Tab -->
+        <div id="focus-tab" class="tab-content hidden">
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Focus Timer -->
+                <div id="focus-timer" class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-800">⏱️ Timer Fokus</h2>
+                    <div class="text-center">
+                        <div id="timer-display" class="text-6xl font-bold text-blue-600 mb-4">25:00</div>
+                        <div class="space-x-4 mb-6">
+                            <button onclick="startTimer()" id="start-btn" class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600 transition-colors">
+                                ▶️ Mulai
+                            </button>
+                            <button onclick="pauseTimer()" id="pause-btn" class="bg-yellow-500 text-white px-6 py-2 rounded-lg hover:bg-yellow-600 transition-colors">
+                                ⏸️ Pause
+                            </button>
+                            <button onclick="resetTimer()" class="bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600 transition-colors">
+                                🔄 Reset
+                            </button>
+                        </div>
+                        <div class="space-x-2 mb-4">
+                            <button onclick="setTimer(25)" class="px-4 py-2 bg-blue-100 text-blue-800 rounded-lg hover:bg-blue-200 transition-colors">25 min</button>
+                            <button onclick="setTimer(15)" class="px-4 py-2 bg-blue-100 text-blue-800 rounded-lg hover:bg-blue-200 transition-colors">15 min</button>
+                            <button onclick="setTimer(5)" class="px-4 py-2 bg-blue-100 text-blue-800 rounded-lg hover:bg-blue-200 transition-colors">5 min</button>
+                        </div>
+                        <div class="border-t pt-4">
+                            <h3 class="text-sm font-medium text-gray-700 mb-3">⚙️ Atur Timer Kustom</h3>
+                            <div class="flex space-x-2">
+                                <input type="number" id="customMinutes" placeholder="Menit" min="0" max="180" class="flex-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-center">
+                                <input type="number" id="customSeconds" placeholder="Detik" min="0" max="59" class="flex-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-center">
+                                <button onclick="setCustomTimer()" class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors">
+                                    ⏰ Set
+                                </button>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-2">Masukkan menit (0-180) dan detik (0-59)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Study Tips -->
+                <div id="study-tips" class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-800">💡 Tips & Metode Belajar</h2>
+                    <div class="space-y-4">
+                        <div class="study-tip p-4 rounded-lg">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="font-medium text-gray-800">🍅 Teknik Pomodoro</h3>
+                                <button onclick="showTechniqueDetail('pomodoro')" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                    ℹ️ Detail
+                                </button>
+                            </div>
+                            <p class="text-sm text-gray-600">Belajar 25 menit, istirahat 5 menit. Setelah 4 sesi, istirahat 15-30 menit.</p>
+                        </div>
+                        <div class="study-tip p-4 rounded-lg">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="font-medium text-gray-800">📚 Active Recall</h3>
+                                <button onclick="showTechniqueDetail('active-recall')" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                    ℹ️ Detail
+                                </button>
+                            </div>
+                            <p class="text-sm text-gray-600">Tutup buku dan coba ingat kembali materi yang baru dipelajari.</p>
+                        </div>
+                        <div class="study-tip p-4 rounded-lg">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="font-medium text-gray-800">🔄 Spaced Repetition</h3>
+                                <button onclick="showTechniqueDetail('spaced-repetition')" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                    ℹ️ Detail
+                                </button>
+                            </div>
+                            <p class="text-sm text-gray-600">Ulangi materi dalam interval waktu yang semakin panjang.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+ 
+  </main>
+
+<footer class="bg-gray-800 text-white text-center py-4">
+    <p>&copy; TUGAS PKK XI RPL 1 | Pengembangan Produk Digital | Aplikasi Manajemen Tugas | Kharisma & Azizi</p>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudyMate - Aplikasi Manajemen Tugas Siswa</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="style.css">
+<style>
+
+</style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+<!-- Header -->
+<header class="gradient-bg text-white p-6 shadow-lg">
+<div class="max-w-6xl mx-auto flex items-center space-x-4">
+<img src="studymate.png" alt="Logo Study Mate" class="w-12 h-12 rounded-lg object-cover">
+    <h1> STUDYMATE </h1>
+    <nav>
+      <a href="index.html">CATATAN PINTAR</a>
+      <a href="sec.html">KALENDER</a>
+      <a href="third.html">TIMER</a>
+      <a href="fourth.html">TASK PROGRESS</a>
+    </nav>
+  </header>
+
+ <!-- Progress Tracker Tab -->
+  <main class="max-w-6xl mx-auto p-6">
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Progress Overview -->
+                <div id="progress-overview" class="md:col-span-2 bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-800">📊 Overview Progress</h2>
+                    <div class="grid md:grid-cols-2 gap-4 mb-6">
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <div class="text-2xl font-bold text-blue-600" id="completed-count">0</div>
+                            <div class="text-sm text-blue-800">Tugas Selesai</div>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <div class="text-2xl font-bold text-green-600" id="completion-rate">0%</div>
+                            <div class="text-sm text-green-800">Tingkat Penyelesaian</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Progress Boxes -->
+                    <h3 class="font-medium text-gray-800 mb-3">🎁 Reward Box - Klik untuk membuka!</h3>
+                    <div id="reward-boxes" class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <div class="bg-gray-200 p-4 rounded-lg text-center">
+                            <div class="text-2xl mb-2">🔒</div>
+                            <div class="text-xs text-gray-500 font-medium">Box 1</div>
+                        </div>
+                        <div class="bg-gray-200 p-4 rounded-lg text-center">
+                            <div class="text-2xl mb-2">🔒</div>
+                            <div class="text-xs text-gray-500 font-medium">Box 2</div>
+                        </div>
+                        <div class="bg-gray-200 p-4 rounded-lg text-center">
+                            <div class="text-2xl mb-2">🔒</div>
+                            <div class="text-xs text-gray-500 font-medium">Box 3</div>
+                        </div>
+                        <div class="bg-gray-200 p-4 rounded-lg text-center">
+                            <div class="text-2xl mb-2">🔒</div>
+                            <div class="text-xs text-gray-500 font-medium">Box 4</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Task Management -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                    <h2 class="text-xl font-semibold mb-4 text-gray-800">✅ Manajemen Tugas</h2>
+                    
+                    <!-- Add Task Form -->
+                    <form onsubmit="addTask(event)" class="mb-6">
+                        <div class="space-y-3">
+                            <input type="text" id="taskTitle" placeholder="Nama tugas..." class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                            <select id="taskPriority" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="rendah">🟢 Prioritas Rendah</option>
+                                <option value="sedang">🟡 Prioritas Sedang</option>
+                                <option value="tinggi">🔴 Prioritas Tinggi</option>
+                            </select>
+                            <input type="date" id="taskDeadline" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                                ➕ Tambah Tugas
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Task List -->
+                    <div class="space-y-3" id="task-list">
+                        <div id="empty-state" class="text-center py-8 text-gray-500">
+                            <div class="text-4xl mb-2">📝</div>
+                            <p class="text-sm">Belum ada tugas. Tambahkan tugas pertama Anda!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+  
+    <!-- Modal for Reward Box -->
+    <div id="reward-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-8 max-w-md mx-4 text-center">
+            <div class="text-6xl mb-4">🎉</div>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Selamat!</h2>
+            <p id="reward-content" class="text-gray-600 mb-6">Anda mendapat reward!</p>
+            <button onclick="closeRewardModal()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                Tutup
+            </button>
+        </div>
+    </div>
+
+</main>
+
+
+  <footer class="bg-gray-800 text-white text-center py-4">
+    <p>&copy; TUGAS PKK XI RPL 1 | Pengembangan Produk Digital | Aplikasi Manajemen Tugas | Kharisma & Azizi</p>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
